@@ -117,14 +117,14 @@ module.exports = function generatePlan(options) {
 
   return github
     .getPullRequest(pullRequest)
-    .catch(function() {
+    .catch(function(err) {
       throw Error('Failed to get pull request: ' + pullRequestURL + ' ' + err + ' @ ' + err.message + ' @ ' + err.stack);
     })
     .then(function(res) {
       pullRequestRecord = res;
 
       if (pullRequestRecord.state !== 'open') {
-        throw Error('Pull request is not open: ' + pullRequestURL+ ' ' + err + ' @ ' + err.message + ' @ ' + err.stack);
+        throw Error('Pull request is not open: ' + pullRequestURL);
       }
 
       return Promise.all([
@@ -194,7 +194,7 @@ module.exports = function generatePlan(options) {
     })
     .then(function(reviewers) {
       if (!reviewers || !reviewers.length) {
-        throw Error('No reviewers found: ' + pullRequestURL + ' ' + err + ' @ ' + err.message + ' @ ' + err.stack);
+        throw Error('No reviewers found: ' + pullRequestURL);
       }
 
       newPullRequestAssignees = reviewers.map(function(reviewer) {
